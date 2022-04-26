@@ -4,6 +4,7 @@ helped = false
 a50 = true 
 returning = false 
 can = false 
+rigged = false
 
 function begin() 
   local a = "Hello, welcome to my gambling site! Before we do anything, what's your name?" 
@@ -187,6 +188,7 @@ function mines()
       return mines()
     else
       print("Oops! You got the character wrong, back to the front with you!") 
+      stillmines = false
       return begin()
     end
   end 
