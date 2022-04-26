@@ -49,12 +49,18 @@ function begin()
   elseif i == "Snake Eyes" or i == "snake eyes" then 
     return snake1()
   elseif i == "Blackjack" or i == "blackjack" then
-    print("Sorry, I lost my cards for now! Come back later and I might find more.")
-    returning = true
-    return begin()
+    if can == false then
+      print("Sorry, I lost my cards for now! Come back later and I might find more.")
+      returning = true
+      return begin()
+    else
+      return blackjack()
+    end
   elseif i == "return" or i == "back" or i == "leave" or i == "stop" then 
     print("Thank you for visiting!") 
-    return 
+    return
+  elseif i == "Right" or i == "right" then
+    return right()
   else 
     print("Sorry, I couldn't understand that.") 
     helped = true
@@ -193,4 +199,132 @@ function mines()
     end
   end 
 end 
+
+firstbl = true
+
+function right()
+  if can == false then
+    if firstbl == true then
+      firstbl = false
+      print("You see a deck of cards, type inspect to grab them!")
+    else
+      print("You can still grab the cards you know.")
+    end
+  else
+    if returning == false then
+      print("You already looked through this room!")
+    end
+  end
+  local i = io.read()
+  if i == "Inspect" or "inspect" then
+    if can == false then
+      print("You have picked up the cards, type left to go back to the main room!")
+      can = true
+      returning = true
+      return right()
+    else
+      if returning == true then
+        print()
+      else
+        print("You've already grabbed the cards from this room!")
+        returning = true
+        return right()
+      end
+    end
+    elseif i == "Left" or i == "left" then
+      returning = false
+      return begin()
+  else
+    print("Sorry, I couldn't understand that.")
+    returning = true
+    return right()
+  end
+end
+
+firstbla = true
+function blackjack()
+  bet = 0
+  max = 21
+  pl = 0
+  house = 0
+  pln = 0
+  hn = 0
+  if money == 0 then
+    print("Sorry, you can't play here if you don't have money!")
+    return begin()
+  end
+  if firstbla then
+    print("Welcome to blackjack! You type how much you'd like to bet, then you will get a random number from 1-10! Whoever is closest to 21 wins!")
+    firstbla = false
+    returning = true
+    return blackjack()
+  else
+    if returning then
+      print()
+    else
+      print("Welcome back! How much would you like to gamble?")
+    end 
+  end
+  local i = io.read()
+  local f = tonumber(i)
+  if f < 1 then
+    print("You must put a number value greater than 0!")
+    returning = true
+    return blackjack()
+  elseif i > money then
+      print("Please only gamble the money you have! You currently have " .. money .. "!")
+      returning = true
+      return blackjack()
+  else
+    bet = f
+    pln = math.random(1, 10)
+    pl = pl + pln
+    hn = math.random(1, 10)
+    house = house + hn
+    print("You drew a " .. pln .. ", your total score is " .. pl .. "!")
+    print("The house drew a " .. hn .. ", our total score is " .. hn .. "!")
+    print()
+    print("Would you like to continue? Type y/n .")
+  end
+  i = io.read()
+  if i == "Y" or "y" then
+    rr()
+  elseif i == "N" or "n" then
+    hn = math.random(1, 10)
+    house = house + hn
+    if house > pl then
+      money = money - bet
+      print("You lost! You are now at " .. money .. "!")
+    elseif house < pl then
+      money = money + bet
+      print("You won! You are now at " .. money .. "!")
+    elseif house == pl then
+      print("There was a tie! You didn't lose or gain any money!")
+    end
+    return blackjack()  
+  end
+  function rr()
+    pln = math.random(1, 10)
+    pl = pl + pln
+    hn = math.random(1, 10)
+    house = house + hn
+    print("You drew a " .. pln .. ", your total score is " .. pl .. "!")
+    print("The house drew a " .. hn .. ", our total score is " .. hn .. "!")
+    print()
+    if (pl < 21 and house < 21) and (i == "Y" or i == "y") then
+      return rr()
+    elseif i == "N" or i == "n" then
+      if pl > 21 or (house > pl and house < 21) then
+        money = money - bet
+        print("Bust! You lost " .. bet .. "! You are now at " .. money .. "!")
+        return blackjack()
+      elseif house > 21 or (house < pl and ply > 21) then
+        money = money + bet
+        print("You win! You won " .. bet .. "! You are now at " .. money .. "!")
+        return blackjack()
+      end
+    end
+  end
+end
+
 begin()
