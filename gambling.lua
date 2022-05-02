@@ -224,7 +224,17 @@ function right()
       return right()
     else
       if returning == true then
-        print()
+        i = io.read()
+        if i == "Left" or "left" then
+            returning = false
+            return begin()
+        elseif i == "Right" or i == "right" or i == "Forward" or i == "forward" or i == "Back" or i == "back" then
+            print("You can't leave that way!")
+            return right()
+        else
+            print("Sorry, I couldn't understand that.")
+            return right()
+        end
       else
         print("You've already grabbed the cards from this room!")
         returning = true
